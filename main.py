@@ -11,10 +11,16 @@ TEXT = (
 )
 
 
+def _output_dir() -> Path:
+    """MAKEFUN_OUTPUT_DIR wins, then OUTPUT_DIR, then /output."""
+    chosen = os.environ.get("MAKEFUN_OUTPUT_DIR") or os.environ.get("OUTPUT_DIR") or "/output"
+    return Path(chosen)
+
+
 def main() -> int:
     assert 1 <= len(TEXT) <= 280, f"entry text must be 1..280 characters, got {len(TEXT)}"
 
-    out_dir = Path(os.environ.get("MAKEFUN_OUTPUT_DIR") or os.environ.get("OUTPUT_DIR") or "/output")
+    out_dir = _output_dir()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     target = out_dir / "entry.txt"
